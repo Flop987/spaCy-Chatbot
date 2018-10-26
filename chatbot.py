@@ -42,25 +42,50 @@ def response():
     # print (summary)
     summary_doc = nlp(summary)
     sentences = summary_doc.sents
-    if question_type == "who" or question_type == "what":
+    answers = []
+    if question_type == "who":
         if detail == "is":
-            print (wikipedia.summary(subject,sentences = 1))
+            answers.append(wikipedia.summary(subject,sentences = 1))
         else:
             for sents in sentences:
+                # print ("A")
                 for w in sents:
+                    # print ("B")
                     doc = nlp(w.text)
                     ents = doc.ents
                     for e in ents:
-                        if e.label_ == "PERSON":
-                            print (sents)
+                        # print ("C")
+                        if e.label_ == "PERSON" and w.text != subject:
+                            answers.append(sents)
+                            # print("PErson found")
                             break
                     else:
                         continue
                     break
-                else:
-                    continue
-                break
-
+                if len(answers) > 3:
+                    break
+        return answers
+                    # else:
+                    #     continue
+                    # break
+                # else:
+                #     continue
+                # break
+    if question_type == "what":
+        if detail == "is":
+            answers.append(wikipedia.summary(subject,sentences = 1))
+        else:
+            for sents in sentences:
+                for w in sents:
+                    if w.text == subject:
+                        answers.append(sents)
+                        break
+                    else:
+                        continue
+                    break
+                if len(answers) > 3:
+                    break
+        return answers
     if question_type == "when":
         for sents in sentences:
             # print (sents)
@@ -70,25 +95,24 @@ def response():
                 ents = doc.ents
                 for e in ents:
                     if e.label_ == "DATE":
-                        print (sents)
+                        answers.append(sents)
                         break
                 else:
                     continue
                 break
-            else:
-                continue
-            break
+            if len(answers) > 3:
+                break
+        return answers
 
     if question_type == "why":
         for sents in sentences:
             for w in sents:
                 if w.text in (detail, "because", "due to","as a result","reason"):
-                    print(sents)
+                    answers.append(sents)
                     break
-            else:
-                continue
-            break
-
+            if len(answers) > 3:
+                break
+        return answers
     if question_type == "where":
         for sents in sentences:
             for w in sents:
@@ -96,24 +120,28 @@ def response():
                 ents = doc.ents
                 for e in ents:
                     if e.label_ == "GPE" or e.label_ == "LOC":
-                        print (sents)
+                        answers.append(sents)
                         break
                 else:
                     continue
                 break
-            else:
-                continue
-            break
+            if len(answers) > 3:
+                break
+        return answers
 
     if question_type == "how":
         for sents in sentences:
             for w in sents:
                 if w.text in ("by","using",detail):
-                    print (sents)
+                    answers.append(sents)
                     break
-            else:
-                continue
-            break
+            if len(answers) > 3:
+                break
+        return answers
+def write():
+    file = open("Recorded Answers","a+")
+    file.write("\n"+ user_input)
+    file.write("\n"+ best_ans)
 
 while True:
     user_input = input('Type quit to exit\nAsk me something!: ')
@@ -122,3 +150,14 @@ while True:
         exit()
     question_type,subject,detail = tag()
     response()
+    answers = response()
+    count = 1
+    for a in answers:
+        print ( "\n"+ str(count) + ")")
+        print (a)
+        count +=1
+    if len(answers) >1:
+        answer_input = int(input('Which answer was the most accurate?\nType in the answer number: '))
+        best_ans = str(answers[answer_input - 1])
+        print (best_ans)
+        write()
