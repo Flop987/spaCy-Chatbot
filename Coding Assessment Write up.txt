@@ -1,5 +1,26 @@
 Coding Assessment Write-up
+The chatbot asks for user to input a question. It then calls the tag function to use the SpaCy library and features to give a part-of-
+speech tag to each word in the question. Using the part-of-speech and dependency tags, the question type, subject and detail is recorded 
+from the question. The response function is then called, which uses the subject to search for a corresponding Wikipedia page. It then 
+searches through the page, looking for relevant sentences based on the question type of the question. For example, for "when" type 
+questions, it searches for a "time" entity based on SpaCy's Named Entity Recognition. If a sentence matches the question, it is added to 
+a list of 4 answers which are displayed to the user. The user can choose the most accurate answer, which is then recorded and stored with 
+the question on the file Recorded Answers.
 
-The chatbot fails on questions such as “How long is the Nile River?” or “How large is Asia?”, where “how” is used to ask about the extent of something. This is because the bot is unable to identify and record adjectives as the detail of the question. The bot should give a numerical value associated with the adjective in the question. The bot also currently doesn’t answer ‘why’ or ‘how’ questions very well because it can’t use Spacy’s named entity recognition to search for an answer in Wikipedia. It can only search for keywords such as “because” or “using” and question detail in Wikipedia. This means that if the Wikipedia article does not contain a sentence with the keywords or the detail, then it can’t return an answer. Another issue is that searching for detail in Wikipedia articles is not always effective, because articles can often use synonyms such as “constructed” instead of “built”. This makes the bot unable to find exact words in Wikipedia. One way to solve this would to use a form of thesaurus to search for keywords and words with similar meanings to the keywords in articles.
+The chatbot fails on questions such as “How long is the Nile River?” or “How large is Asia?”, where “how” is used to ask about the extent 
+of something. This is because the bot is unable to identify and record adjectives as the detail of the question. The bot should give a 
+numerical value associated with the adjective in the question. The bot also currently doesn’t answer ‘why’ or ‘how’ questions very well 
+because it can’t use Spacy’s named entity recognition to search for an answer in Wikipedia. It can only search for keywords such as 
+“because” or “using” and question detail in Wikipedia. This means that if the Wikipedia article does not contain a sentence with the 
+keywords or the detail, then it can’t return an answer. Another issue is that searching for detail in Wikipedia articles is not always 
+effective, because articles can often use synonyms such as “constructed” instead of “built”. This makes the bot unable to find exact 
+words in Wikipedia. One way to solve this would to use a form of thesaurus to search for keywords and words with similar meanings to the 
+keywords in articles.
 
-Currently, the bot searches for keywords in each sentence in the article, then returns the first sentence with the keywords as an answer. This can lead to inaccuracies in answers if the keyword is a common word. One way to improve this would be to use a scoring system. The bot would search through every sentence in the article’s summary, then assign a score to each sentence based on how suitable the sentence is for an answer. For example, a sentence with more keywords in it would have a higher score and would therefore be selected as the answer. The bot can only answer questions starting with what, why, where, when, who and how, and fails on questions such as “Are whales mammals?”. One way to solve this would be to introduce a new question type for questions with yes/no answers. The bot could for example, check if “whales” and “mammals” are in the first sentence of the article, then return “yes” as an answer. 
+Currently, the bot searches for keywords in each sentence in the article, then returns the first sentence with the keywords as an answer. 
+This can lead to inaccuracies in answers if the keyword is a common word. One way to improve this would be to use a scoring system. The 
+bot would search through every sentence in the article’s summary, then assign a score to each sentence based on how suitable the sentence 
+is for an answer. For example, a sentence with more keywords in it would have a higher score and would therefore be selected as the 
+answer. The bot can only answer questions starting with what, why, where, when, who and how, and fails on questions such as “Are whales 
+mammals?”. One way to solve this would be to introduce a new question type for questions with yes/no answers. The bot could for example, 
+check if “whales” and “mammals” are in the first sentence of the article, then return “yes” as an answer.
